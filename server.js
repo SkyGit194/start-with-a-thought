@@ -76,7 +76,7 @@ if (isProd) {
   }
   app.use(express.static(distPath))
   // SPA fallback
-  app.get('*', (_req, res) => res.sendFile(join(distPath, 'index.html')))
+  app.use((_req, res) => res.sendFile(join(distPath, 'index.html')))
 } else {
   // Dev: Vite handles the frontend — this server only needs to be started
   // when you want to test the Express layer separately. Normally use `npm run dev`.
