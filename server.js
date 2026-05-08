@@ -7,7 +7,7 @@ import { dirname, join } from 'path'
 import { existsSync } from 'fs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 const isProd = process.env.NODE_ENV === 'production'
 const apiKey = process.env.VITE_ANTHROPIC_API_KEY
 
