@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import express from 'express'
-import { createServer as createViteServer } from 'vite'
 import Anthropic from '@anthropic-ai/sdk'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
