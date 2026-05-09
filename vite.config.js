@@ -93,6 +93,7 @@ export default defineConfig(({ mode }) => {
   const apiKey = env.VITE_ANTHROPIC_API_KEY
 
   return {
+    base: '/',
     plugins: [react(), tailwindcss(), researchApiPlugin(apiKey)],
   }
 })
