@@ -7,8 +7,10 @@ import { existsSync } from 'fs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PORT = process.env.PORT || 3001
-const isProd = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'development'
 const apiKey = process.env.VITE_ANTHROPIC_API_KEY
+
+console.log(`[server] NODE_ENV=${process.env.NODE_ENV} isDev=${isDev} PORT=${PORT}`)
 
 const app = express()
 app.use(express.json())
@@ -67,22 +69,20 @@ Each string should be a complete, specific sentence — not a vague label.`,
 })
 
 // ── Static (production) / Dev proxy ───────────────────────────────────────────
-if (isProd) {
+if (!isDev) {
   const distPath = join(__dirname, 'dist')
+  console.log(`[server] distPath=${distPath} exists=${existsSync(distPath)}`)
   if (!existsSync(distPath)) {
-    console.error('dist/ not found. Run `npm run build` first.')
+    console.error('[server] dist/ not found — run `npm run build` first.')
     process.exit(1)
   }
   app.use(express.static(distPath))
-  // SPA fallback
+  // SPA fallback — must come last so all non-asset routes serve index.html
   app.use((_req, res) => res.sendFile(join(distPath, 'index.html')))
 } else {
-  // Dev: Vite handles the frontend — this server only needs to be started
-  // when you want to test the Express layer separately. Normally use `npm run dev`.
-  console.log('Dev mode: frontend is served by Vite at http://localhost:5173')
+  console.log('[server] Dev mode: frontend served by Vite at http://localhost:5173')
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-  if (isProd) console.log('Serving built app from dist/')
+  console.log(`[server] Listening on port ${PORT} (${isDev ? 'dev' : 'production'})`)
 })
